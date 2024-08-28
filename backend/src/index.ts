@@ -2,17 +2,43 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, verify, sign, jwt } from "hono/jwt";
-// import { Prisma } from "@prisma/client";
+import dotenv from "dotenv"
 // import { env } from "hono/adapter";
+// dotenv.config();
+interface bidings{
+  DATABASE_URL: string;
+  JWT_TOKEN: string;
+
+}
 const app = new Hono<{
-  Bindings: {
-    DATABASE_URL: string;
-    JWT_TOKEN: string;
-  };
+  Bindings: bidings
 }>();
+app.post("/api/v1/blog/*",async(c)=>{
+// verify the header and proced the data according to verfication
+const header= c.req.header("authorization")||"";
+const token=header.split("")[1]
+
+const response=await verify(token,c.env.JWT_TOKEN);
+
+if(response.id){
+  next()
+}else{
+  c.status(403);
+  return c.json({
+    "error":"AUTH"
+  })
+}
+
+
+
+  return c.text("HELLI")
+})
+
+
+
 app.post("/api/v1/user/signup", async (c) => {
   const prisma = new PrismaClient({
-    datasourceUrl: env.DATABASE_URL,
+    datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
   //Getting the input form the user
   const body = await c.req.json();
@@ -21,6 +47,8 @@ app.post("/api/v1/user/signup", async (c) => {
     data: {
       email: body.email,
       password: body.password,
+      name:body.name,
+
     },
   });
   // const secret="codebro:"
@@ -28,12 +56,12 @@ app.post("/api/v1/user/signup", async (c) => {
   return c.json({
     jwt: token,
   });
-  return c.text("Hello singup route");
+  // return c.text("Hello singup route");
 });
 app.post("/api/v1/user/signin", async  (c) => {
 //Intialize the prisma
 const prisma = new PrismaClient({
-  datasourceUrl: env.DATABASE_URL,
+  datasourceUrl: c.env.DATABASE_URL,
 }).$extends(withAccelerate());
 
 const body=await c.req.json();
@@ -69,3 +97,6 @@ app.get("/api/v1/blog/bulk", (c) => {
 });
 
 export default app;
+function next() {
+  throw new Error("Function not implemented.");
+}
