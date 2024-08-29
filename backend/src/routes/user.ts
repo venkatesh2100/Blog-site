@@ -2,33 +2,30 @@ import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
-import { Bindings } from "hono/types";
-// import userRouter from "..";
 
 interface bidings {
   DATABASE_URL: string;
   JWT_TOKEN: string;
 }
 
+
+
 export const userRouter = new Hono<{ Bindings: bidings }>();
 
 //Signup route
-userRouter.post("/api/v1/user/signup", async (c) => {
+userRouter.post("/signup", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
-
-  //Getting the input form the user
   const body = await c.req.json();
   try {
     const user = await prisma.user.create({
       data: {
         email: body.email,
         password: body.password,
-        name: body.name,
+        username: body.username,
       },
     });
-    // const secret="codebro:"
     const token = await sign({ id: user.id }, c.env.JWT_TOKEN);
     // return c.text("SignedUp")
     return c.json({
@@ -42,8 +39,8 @@ userRouter.post("/api/v1/user/signup", async (c) => {
   // return c.text("Hello singup route");
 });
 
-userRouter.post("/api/v1/user/signin", async (c) => {
-  //Intialize the prisma
+userRouter.post("/signin", async (c) => {
+  // Intialize the prisma
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -53,7 +50,7 @@ userRouter.post("/api/v1/user/signin", async (c) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        name: body.username,
+        username: body.username,
         password: body.password,
       },
     });
