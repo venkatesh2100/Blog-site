@@ -17,6 +17,7 @@ userRouter.post("/signup", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
+  
   const body = await c.req.json();
   try {
     const user = await prisma.user.create({
@@ -54,6 +55,7 @@ userRouter.post("/signin", async (c) => {
         password: body.password,
       },
     });
+
     if (!user) {
       c.status(403);
       return c.json("Invalid Username or Password? Forgot password");
