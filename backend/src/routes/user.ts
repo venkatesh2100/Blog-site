@@ -13,10 +13,19 @@ export const userRouter = new Hono<{ Bindings: bidings }>();
 userRouter.post("/signup", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
-  }).$extends(withAccelerate());
+  }).$extend(withAccelerate());
 
-  WT_SECRET);
-    return c.son({
+  const body = await c.req.json();
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: body.email,
+        password: body.password,
+        name: body.name,
+      },
+    });
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+    return c.json({
       jwt: token,
     });
   } catch (e) {
