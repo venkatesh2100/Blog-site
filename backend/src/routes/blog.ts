@@ -116,10 +116,10 @@ blogRouter.get("/bulk", async(c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
+
   const body = await c.req.json();
   try {
-    const posts = await prisma.post.findMany({
-    });
+    const posts = await prisma.post.findMany({});
 
     return c.json({
       posts
@@ -128,7 +128,6 @@ blogRouter.get("/bulk", async(c) => {
     c.status(411);
     return c.text("Error occur while renderthe posts");
   }
-
 });
 
 export default blogRouter;
