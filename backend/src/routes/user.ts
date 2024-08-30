@@ -7,7 +7,6 @@ interface bidings {
   DATABASE_URL: string;
   JWT_SECRET: string;
 }
-
 export const userRouter = new Hono<{ Bindings: bidings }>();
 
 //Signup route
@@ -16,17 +15,8 @@ userRouter.post("/signup", async (c) => {
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const body = await c.req.json();
-  try {
-    const user = await prisma.user.create({
-      data: {
-        email: body.email,
-        password: body.password,
-        name: body.name,
-      },
-    });
-    const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({
+  WT_SECRET);
+    return c.son({
       jwt: token,
     });
   } catch (e) {
@@ -34,7 +24,6 @@ userRouter.post("/signup", async (c) => {
     return c.text("User Exists");
   }
 });
-
 
 userRouter.post("/signin", async (c) => {
   const prisma = new PrismaClient({
