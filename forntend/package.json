@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@venkatesh2100/medium-common": "^1.0.0",
+    "@ajeetkumarnpm/medium-common-final": "^1.0.0",
+    "@venkatesh2100/medium-common": "^1.0.1",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "react": "^18.3.1",

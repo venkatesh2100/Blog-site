@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client/edge";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { prismaCreate } from "../middlewares/primsaCreate";
-import { signinInput, signupInput } from "@venkatesh2100/medium-common";
+// import { signinInput, signupInput } from "@venkatesh2100/medium-common";
+import { signinInput,signupInput } from "@ajeetkumarnpm/medium-common-final";  
 
 interface bidings {
   DATABASE_URL: string;
