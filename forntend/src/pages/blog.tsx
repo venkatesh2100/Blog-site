@@ -1,3 +1,3 @@
 export const Blog = () => {
-  return <>Hello</>;
+  return <>Hello WORLD</>;
 };

@@ -3,7 +3,7 @@ export const Greeter = () => {
     <div className="flex justify-center bg-slate-300  h-screen flex-col ">
       <div className="flex justify-center  ">
         <div className="max-w-lg">
-          <div className="max-w-md font-bold text-2xl text-center text-black ">
+          <div className="max-w-md font-bold text-3xl text-center text-black ">
             “Your first blog posts won’t be perfect, but you just have to do it.
             You have to start somewhere.”
           </div>

@@ -1,3 +1,13 @@
+import { Auth } from "../components/auth";
+import { Greeter } from "../components/Greeter";
+
 export const SignIn = () => {
-  return <h1>SignIN</h1>;
+  return (
+    <div className="h-screen grid md:grid-cols-2">
+      <Auth type="signin"/>
+      <div className="invisible md:visible">
+        <Greeter />
+      </div>
+    </div>
+  );
 };

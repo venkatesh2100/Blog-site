@@ -1,0 +1,1 @@
+export const BACKEND_URL="https://backend.venkyvenkat-iit.workers.dev/"
