@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client/edge";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { prismaCreate } from "../middlewares/primsaCreate";
-// import { signinInput, signupInput } from "@venkatesh2100/medium-common";
-import { signinInput,signupInput } from "@ajeetkumarnpm/medium-common-final";  
+import { signinInput, signupInput } from "@venkatesh2100/medium-common";
+// import { signinInput,signupInput } from "@ajeetkumarnpm/medium-common-final";
 
 interface bidings {
   DATABASE_URL: string;
@@ -22,7 +22,7 @@ userRouter.post("/signup", async (c) => {
   // }).$extends(withAccelerate());
   const prisma = c.get("prisma");
   const body: {
-    email: string;
+    username: string;
     password: string;
     name?: string;
   } = await c.req.json();
@@ -37,9 +37,9 @@ userRouter.post("/signup", async (c) => {
   try {
     const user = await prisma.user.create({
       data: {
-        email: body.email,
+        email: body.username,
         password: body.password,
-        name: body.name || body.email.split("@")[0],
+        name: body.name || body.username.split("@")[0],
       },
     });
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
@@ -55,7 +55,7 @@ userRouter.post("/signup", async (c) => {
 userRouter.post("/signin", async (c) => {
   const prisma = c.get("prisma");
   const body: {
-    email: string;
+    username: string;
     password: string;
   } = await c.req.json();
   //check wheter the  userfound
@@ -67,7 +67,7 @@ userRouter.post("/signin", async (c) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        email: body.email,
+        email: body.username,
         password: body.password,
       },
     });

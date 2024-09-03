@@ -10,18 +10,19 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const [postInputs, setPostInputs] = useState<SignupInput>({
     name: "",
     username: "",
-    password: "",
+    password: ""
   });
 
   async function sendRequest() {
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
+        `${BACKEND_URL}api/v1/user/${type === "signup" ? "signup" : "signin"}`,
         postInputs
       );
       const jwt = response.data;
       localStorage.setItem("token", jwt);
-      navigate("/blog");
+      localStorage.setItem("name",postInputs.name || "User")
+      navigate("/blogs");
     } catch (e) {
       alert(`Error during ${type}`);
       console.log(e);
@@ -50,19 +51,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           </div>
         </div>
         <div className="pt-5">
-          {type === "signup" && (
-            <LabelInputs
-              title="Username"
-              placeholder="Enter your Username"
-              type="text"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  name: e.target.value,
-                });
-              }}
-            />
-          )}
+        {type === "signup" ? <LabelInputs title="Username" onChange={(e) => {
+                    setPostInputs({
+                        ...postInputs,
+                        name : e.target.value
+                    })
+                }} placeholder="Enter your username"/> : null}
 
           <LabelInputs
             title="Email"
@@ -114,6 +108,7 @@ function LabelInputs({ title, placeholder, type = "text", onChange }: LabelInter
       >
         {title}
       </label>
+
       <input
         onChange={onChange}
         type={type}
