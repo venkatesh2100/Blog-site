@@ -19,7 +19,9 @@ app.use("/*", prismaCreate);
 
 app.post("/", authMiddleWare, async (c) => {
   const prisma = c.get("prisma");
+  console.log("Prisma instance:", prisma);
   const authorId = c.get("userId");
+  console.log("User ID:", authorId);
   const body = await c.req.json();
   const { success } = createBlog.safeParse(body);
   if (!success) {
@@ -75,7 +77,7 @@ app.put("/", authMiddleWare, async (c) => {
   }
 });
 
-app.get("/bulk", async (c) => {
+app.get("/bulk",async (c) => {
   const prisma = c.get("prisma");
   const blogs = await prisma.post.findMany({
     select: {
@@ -90,13 +92,16 @@ app.get("/bulk", async (c) => {
     },
   });
   return c.json({
-    blogs,
+    blogs
   });
 });
 
 app.get("/:id", async (c) => {
   const id = c.req.param("id");
   const prisma = c.get("prisma");
+
+  // Debugging: Check the received ID
+  console.log("Received ID:", id);
   const blog = await prisma.post.findFirst({
     where: {
       id,
@@ -112,16 +117,20 @@ app.get("/:id", async (c) => {
       },
     },
   });
+
+  // Debugging: Check if a blog was found
   if (!blog) {
+    console.log("Blog not found for ID:", id);
     c.status(404);
     return c.json({
-      error: "blog not found",
+      error: "Blog not found",
     });
   }
+
   return c.json({
     blog,
   });
 });
 
-export default app;
 
+export default app;

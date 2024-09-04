@@ -10,18 +10,19 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const [postInputs, setPostInputs] = useState<SignupInput>({
     name: "",
     username: "",
-    password: ""
+    password: "",
   });
 
   async function sendRequest() {
     try {
       const response = await axios.post(
         `${BACKEND_URL}api/v1/user/${type === "signup" ? "signup" : "signin"}`,
-        postInputs
+        postInputs,
       );
       const jwt = response.data;
-      localStorage.setItem("token", jwt);
-      localStorage.setItem("name",postInputs.name || "User")
+      // localStorage.setItem("token", jwt);
+      localStorage.setItem("token", JSON.stringify(jwt));
+      localStorage.setItem("name", postInputs.name || "User");
       navigate("/blogs");
     } catch (e) {
       alert(`Error during ${type}`);
@@ -51,12 +52,18 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           </div>
         </div>
         <div className="pt-5">
-        {type === "signup" ? <LabelInputs title="Username" onChange={(e) => {
-                    setPostInputs({
-                        ...postInputs,
-                        name : e.target.value
-                    })
-                }} placeholder="Enter your username"/> : null}
+          {type === "signup" ? (
+            <LabelInputs
+              title="Username"
+              onChange={(e) => {
+                setPostInputs({
+                  ...postInputs,
+                  name: e.target.value,
+                });
+              }}
+              placeholder="Enter your username"
+            />
+          ) : null}
 
           <LabelInputs
             title="Email"
@@ -99,7 +106,12 @@ interface LabelInterface {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function LabelInputs({ title, placeholder, type = "text", onChange }: LabelInterface) {
+function LabelInputs({
+  title,
+  placeholder,
+  type = "text",
+  onChange,
+}: LabelInterface) {
   return (
     <div>
       <label
