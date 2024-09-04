@@ -4,7 +4,7 @@ interface BlogcardProps {
   title: string;
   content: string;
 }
-
+//?comment publish DATE if possible
 export const BlogCard = ({
   authorName,
   publishDate,
@@ -23,9 +23,11 @@ export const BlogCard = ({
         <div className="font-bold text-2xl">{title}</div>
         <div className="font-light mt-1">{content.slice(0, 100) + "..."}</div>
       </div>
+      //?comment this Sice error
       <div className="mt-4 text-slate-500">{`${Math.ceil(
         content.length / 300
       )} minutes`}</div>
+      {/* <div>{content}</div> */}
       <div className="bg-slate-200 w-full h-1"></div>
     </div>
   );

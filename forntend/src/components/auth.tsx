@@ -20,8 +20,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         postInputs,
       );
       const jwt = response.data;
-      // localStorage.setItem("token", jwt);
-      localStorage.setItem("token", JSON.stringify(jwt));
+      localStorage.setItem("token", jwt);
       localStorage.setItem("name", postInputs.name || "User");
       navigate("/blogs");
     } catch (e) {

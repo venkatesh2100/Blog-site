@@ -91,7 +91,7 @@ userRouter.post("/signin", async (c) => {
 
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
 
-    return c.json({ jwt: token });
+    return c.json( token );
   } catch (error) {
     c.status(500);
     return c.json({ message: "Error occurred while processing the request." });
