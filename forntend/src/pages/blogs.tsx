@@ -7,9 +7,6 @@ export const Blogs = () => {
   if (loading) {
     return <div>Loading</div>;
   }
-  // if (!Array.isArray(blogs)) {
-  //   return <div>No blogs available</div>;
-  // }
   return (
     <div>
       <Appbar />
@@ -18,6 +15,7 @@ export const Blogs = () => {
           <div>
             {blogs.map((blog) => (
               <BlogCard
+                key={blog.id}
                 authorName={blog.author?.name || "Anonymous"} // Use Optional Chaining to safely access 'name'
                 title={blog.title}
                 content={blog.content}
