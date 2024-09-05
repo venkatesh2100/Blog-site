@@ -24,11 +24,7 @@ export const useBlogs = () => {
             Authorization: localStorage.getItem("token") || "",
           },
         });
-        console.log([response.data]);
-        console.log(typeof(response.data))
-        const arr=[2093,2902]
-        console.log(typeof(arr))
-        setBlogs([response.data]);
+        setBlogs(response.data.blogs);
       } catch (err) {
         setError("Failed to fetch blogs");
         console.error(err); // For debugging purposes
@@ -36,7 +32,6 @@ export const useBlogs = () => {
         setLoading(false);
       }
     };
-
     fetchBlogs();
   }, []);
 
